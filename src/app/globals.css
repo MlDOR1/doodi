@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "@fontsource-variable/noto-sans-thai/index.css";
+@import "@fontsource/poppins/latin-600.css";
+@import "@fontsource/poppins/latin-700.css";
+
+@theme {
+  --font-sans: "Noto Sans Thai Variable", "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", "Leelawadee UI", Tahoma, sans-serif;
+  --font-display: "Poppins", "Noto Sans Thai Variable", system-ui, sans-serif;
+
+  --color-ink: #0a0506;
+  --color-surface: #170a0d;
+  --color-raised: #231014;
+  --color-wine: #4a0f1b;
+  --color-line: #3a1a20;
+  --color-crimson: #e0263f;
+  --color-crimson-strong: #c4172f;
+  --color-flare: #ff6b7d;
+  --color-cream: #f6ede8;
+  --color-muted: #c0aaa8;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--color-ink);
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-cream);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--color-crimson);
+  color: white;
+}
+
+/* Theatre curtain: repeating vertical folds in burgundy, lit from the centre. Pure CSS, no asset. */
+.curtain {
+  background-color: #1a070b;
+  background-image:
+    radial-gradient(ellipse 60% 70% at 50% 35%, rgb(224 38 63 / 0.22), transparent 70%),
+    repeating-linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.55) 0,
+      rgb(120 14 32 / 0.5) 38px,
+      rgb(190 28 52 / 0.35) 62px,
+      rgb(120 14 32 / 0.5) 86px,
+      rgb(0 0 0 / 0.55) 124px
+    );
+}
+
+.poster-fallback {
+  background:
+    radial-gradient(circle at 30% 20%, rgb(224 38 63 / 0.35), transparent 55%),
+    linear-gradient(160deg, var(--color-wine), var(--color-ink));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lift {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .lift:hover {
+    transform: translateY(-4px);
+  }
+  .fade-in {
+    animation: fade-in 0.5s ease both;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-raised) 25%, #33161c 50%, var(--color-raised) 75%);
+  background-size: 200% 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: shimmer 1.4s linear infinite;
+  }
+  @keyframes shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+erDiagram
+    users ||--o{ reviews : writes
+    movies ||--o{ reviews : receives
+    users ||--o{ watchlists : saves
+    movies ||--o{ watchlists : appears_in
+    users ||--o{ sessions : authenticates_with
+
+    users {
+        INT user_id PK "auto increment"
+        VARCHAR_100 display_name
+        VARCHAR_255 email UK
+        VARCHAR_255 password_hash "Argon2 hash"
+        ENUM role "member or admin; default member"
+        DATETIME_3 created_at "default now"
+    }
+
+    movies {
+        INT movie_id PK "auto increment"
+        INT tmdb_id UK "nullable"
+        VARCHAR_255 title
+        TEXT alt_titles "nullable"
+        TEXT synopsis "nullable"
+        VARCHAR_100 genre "nullable; comma separated"
+        SMALLINT release_year "nullable"
+        VARCHAR_2048 poster_url "nullable"
+        DATETIME_3 created_at "default now"
+        DATETIME_3 deleted_at "nullable; soft delete"
+    }
+
+    reviews {
+        INT reviews_id PK "auto increment"
+        INT user_id FK "composite unique with movie_id"
+        INT movie_id FK "composite unique with user_id"
+        TINYINT rating "CHECK 1 to 5"
+        TEXT content
+        BOOLEAN has_spoiler "default false"
+        DATETIME_3 created_at "default now"
+        DATETIME_3 updated_at "Prisma updates on write"
+    }
+
+    watchlists {
+        INT user_id PK,FK "composite primary key"
+        INT movie_id PK,FK "composite primary key"
+        DATETIME_3 created_at "default now"
+    }
+
+    sessions {
+        CHAR_64 session_id PK "SHA-256 token hash"
+        INT user_id FK
+        DATETIME_3 expires_at
+        DATETIME_3 created_at "default now"
+    }

@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role {
+  member
+  admin
+}
+
+model User {
+  id           Int      @id @default(autoincrement()) @map("user_id")
+  displayName  String   @map("display_name") @db.VarChar(100)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  role         Role     @default(member)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  reviews   Review[]
+  watchlist Watchlist[]
+  sessions  Session[]
+
+  @@map("users")
+}
+
+model Movie {
+  id          Int       @id @default(autoincrement()) @map("movie_id")
+  tmdbId      Int?      @unique @map("tmdb_id")
+  title       String    @db.VarChar(255)
+  altTitles   String?   @map("alt_titles") @db.Text
+  synopsis    String?   @db.Text
+  genre       String?   @db.VarChar(100)
+  releaseYear Int?      @map("release_year") @db.SmallInt
+  posterUrl   String?   @map("poster_url") @db.VarChar(2048)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  reviews   Review[]
+  watchlist Watchlist[]
+
+  @@index([deletedAt, createdAt])
+  @@index([releaseYear])
+  @@index([title])
+  @@map("movies")
+}
+
+model Review {
+  id         Int      @id @default(autoincrement()) @map("reviews_id")
+  userId     Int      @map("user_id")
+  movieId    Int      @map("movie_id")
+  rating     Int      @db.TinyInt
+  content    String   @db.Text
+  hasSpoiler Boolean  @default(false) @map("has_spoiler")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+  @@index([movieId, createdAt])
+  @@map("reviews")
+}
+
+model Watchlist {
+  userId    Int      @map("user_id")
+  movieId   Int      @map("movie_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@id([userId, movieId])
+  @@index([movieId])
+  @@map("watchlists")
+}
+
+// Stores a SHA-256 hash of the cookie token, so a leaked table cannot be replayed.
+model Session {
+  id        String   @id @map("session_id") @db.Char(64)
+  userId    Int      @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}

@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1350" viewBox="0 0 2400 1350" role="img" aria-labelledby="title desc">
+<title id="title">DOODI database entity relationship diagram</title>
+<desc id="desc">Five tables and all 31 columns: users, movies, reviews, watchlists and sessions. Users and movies each have zero or many reviews and watchlist entries. Users have zero or many sessions. Each child references exactly one parent.</desc>
+<rect x="0" y="0" width="2400" height="1350" rx="0" fill="#F6F8FC" stroke="none" stroke-width="2"/>
+<text x="80" y="42" fill="#162337" font-family="Segoe UI,Arial,sans-serif" font-size="48" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">DOODI / Database diagram</text>
+<text x="80" y="111" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">Movie review platform  |  MySQL + Prisma  |  5 tables / 5 relationships</text>
+<text x="80" y="162" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">Actual database names. Each relationship connects one parent to zero or more child rows.</text>
+<polyline points="680,347 775,347 775,389 900,389" fill="none" stroke="#2952A3" stroke-width="4" stroke-linejoin="round"/>
+<text x="701" y="316" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">1</text>
+<text x="819" y="356" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">0..N</text>
+<polyline points="1720,347 1615,347 1615,431 1500,431" fill="none" stroke="#176D67" stroke-width="4" stroke-linejoin="round"/>
+<text x="1670" y="316" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">1</text>
+<text x="1515" y="398" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">0..N</text>
+<polyline points="680,347 720,347 720,1017 900,1017" fill="none" stroke="#2952A3" stroke-width="4" stroke-linejoin="round"/>
+<text x="734" y="524" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">1</text>
+<text x="829" y="985" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">0..N</text>
+<polyline points="1720,347 1670,347 1670,1059 1500,1059" fill="none" stroke="#176D67" stroke-width="4" stroke-linejoin="round"/>
+<text x="1686" y="524" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">1</text>
+<text x="1515" y="1026" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">0..N</text>
+<polyline points="380,638 380,900" fill="none" stroke="#2952A3" stroke-width="4" stroke-linejoin="round"/>
+<text x="399" y="657" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">1</text>
+<text x="399" y="849" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="23" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">0..N</text>
+<rect x="80" y="230" width="600" height="408" rx="10" fill="#FFFFFF" stroke="#D6DFEB" stroke-width="2"/>
+<rect x="81" y="231" width="598" height="57" rx="8" fill="#2952A3" stroke="none" stroke-width="2"/>
+<rect x="81" y="265" width="598" height="23" rx="0" fill="#2952A3" stroke="none" stroke-width="2"/>
+<text x="102" y="238" fill="#FFFFFF" font-family="Segoe UI,Arial,sans-serif" font-size="31" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">users</text>
+<text x="102" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">KEY</text>
+<text x="196" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">COLUMN</text>
+<text x="658" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge">TYPE</text>
+<rect x="82" y="326" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="102" y="332" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">PK</text>
+<text x="196" y="331" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">user_id</text>
+<text x="658" y="333" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<text x="102" y="374" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="196" y="373" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">display_name</text>
+<text x="658" y="375" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">VARCHAR(100)</text>
+<rect x="82" y="410" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="102" y="416" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">UK</text>
+<text x="196" y="415" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">email</text>
+<text x="658" y="417" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">VARCHAR(255)</text>
+<text x="102" y="458" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="196" y="457" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">password_hash</text>
+<text x="658" y="459" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">VARCHAR(255)</text>
+<rect x="82" y="494" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="102" y="500" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="196" y="499" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">role</text>
+<text x="658" y="501" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">ENUM</text>
+<text x="102" y="542" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="196" y="541" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">created_at</text>
+<text x="658" y="543" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3)</text>
+<polyline points="81,578 679,578" fill="none" stroke="#D6DFEB" stroke-width="1" stroke-linejoin="round"/>
+<text x="102" y="583" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">Role: member (default) or admin</text>
+<rect x="900" y="230" width="600" height="492" rx="10" fill="#FFFFFF" stroke="#D6DFEB" stroke-width="2"/>
+<rect x="901" y="231" width="598" height="57" rx="8" fill="#A65723" stroke="none" stroke-width="2"/>
+<rect x="901" y="265" width="598" height="23" rx="0" fill="#A65723" stroke="none" stroke-width="2"/>
+<text x="922" y="238" fill="#FFFFFF" font-family="Segoe UI,Arial,sans-serif" font-size="31" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">reviews</text>
+<text x="922" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">KEY</text>
+<text x="1016" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">COLUMN</text>
+<text x="1478" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge">TYPE</text>
+<rect x="902" y="326" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="922" y="332" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">PK</text>
+<text x="1016" y="331" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">reviews_id</text>
+<text x="1478" y="333" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<text x="922" y="374" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">FK</text>
+<text x="1016" y="373" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">user_id</text>
+<text x="1478" y="375" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<rect x="902" y="410" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="922" y="416" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">FK</text>
+<text x="1016" y="415" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">movie_id</text>
+<text x="1478" y="417" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<text x="922" y="458" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1016" y="457" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">rating</text>
+<text x="1478" y="459" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">TINYINT</text>
+<rect x="902" y="494" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="922" y="500" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1016" y="499" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">content</text>
+<text x="1478" y="501" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">TEXT</text>
+<text x="922" y="542" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1016" y="541" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">has_spoiler</text>
+<text x="1478" y="543" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">BOOLEAN</text>
+<rect x="902" y="578" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="922" y="584" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1016" y="583" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">created_at</text>
+<text x="1478" y="585" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3)</text>
+<text x="922" y="626" fill="#A65723" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1016" y="625" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">updated_at</text>
+<text x="1478" y="627" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3)</text>
+<polyline points="901,662 1499,662" fill="none" stroke="#D6DFEB" stroke-width="1" stroke-linejoin="round"/>
+<text x="922" y="667" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">UNIQUE (user_id, movie_id)</text>
+<text x="922" y="692" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">CHECK rating BETWEEN 1 AND 5</text>
+<rect x="1720" y="230" width="600" height="576" rx="10" fill="#FFFFFF" stroke="#D6DFEB" stroke-width="2"/>
+<rect x="1721" y="231" width="598" height="57" rx="8" fill="#176D67" stroke="none" stroke-width="2"/>
+<rect x="1721" y="265" width="598" height="23" rx="0" fill="#176D67" stroke="none" stroke-width="2"/>
+<text x="1742" y="238" fill="#FFFFFF" font-family="Segoe UI,Arial,sans-serif" font-size="31" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">movies</text>
+<text x="1742" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">KEY</text>
+<text x="1836" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">COLUMN</text>
+<text x="2298" y="298" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge">TYPE</text>
+<rect x="1722" y="326" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="1742" y="332" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">PK</text>
+<text x="1836" y="331" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">movie_id</text>
+<text x="2298" y="333" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<text x="1742" y="374" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">UK</text>
+<text x="1836" y="373" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">tmdb_id</text>
+<text x="2298" y="375" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT ?</text>
+<rect x="1722" y="410" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="1742" y="416" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="415" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">title</text>
+<text x="2298" y="417" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">VARCHAR(255)</text>
+<text x="1742" y="458" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="457" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">alt_titles</text>
+<text x="2298" y="459" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">TEXT ?</text>
+<rect x="1722" y="494" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="1742" y="500" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="499" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">synopsis</text>
+<text x="2298" y="501" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">TEXT ?</text>
+<text x="1742" y="542" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="541" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">genre</text>
+<text x="2298" y="543" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">VARCHAR(100) ?</text>
+<rect x="1722" y="578" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="1742" y="584" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="583" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">release_year</text>
+<text x="2298" y="585" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">SMALLINT ?</text>
+<text x="1742" y="626" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="625" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">poster_url</text>
+<text x="2298" y="627" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">VARCHAR(2048) ?</text>
+<rect x="1722" y="662" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="1742" y="668" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="667" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">created_at</text>
+<text x="2298" y="669" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3)</text>
+<text x="1742" y="710" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1836" y="709" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">deleted_at</text>
+<text x="2298" y="711" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3) ?</text>
+<polyline points="1721,746 2319,746" fill="none" stroke="#D6DFEB" stroke-width="1" stroke-linejoin="round"/>
+<text x="1742" y="751" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">? = nullable; deleted_at hides the movie</text>
+<rect x="80" y="900" width="600" height="324" rx="10" fill="#FFFFFF" stroke="#D6DFEB" stroke-width="2"/>
+<rect x="81" y="901" width="598" height="57" rx="8" fill="#2952A3" stroke="none" stroke-width="2"/>
+<rect x="81" y="935" width="598" height="23" rx="0" fill="#2952A3" stroke="none" stroke-width="2"/>
+<text x="102" y="908" fill="#FFFFFF" font-family="Segoe UI,Arial,sans-serif" font-size="31" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">sessions</text>
+<text x="102" y="968" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">KEY</text>
+<text x="196" y="968" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">COLUMN</text>
+<text x="658" y="968" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge">TYPE</text>
+<rect x="82" y="996" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="102" y="1002" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">PK</text>
+<text x="196" y="1001" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">session_id</text>
+<text x="658" y="1003" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">CHAR(64)</text>
+<text x="102" y="1044" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">FK</text>
+<text x="196" y="1043" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">user_id</text>
+<text x="658" y="1045" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<rect x="82" y="1080" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="102" y="1086" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="196" y="1085" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">expires_at</text>
+<text x="658" y="1087" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3)</text>
+<text x="102" y="1128" fill="#2952A3" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="196" y="1127" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">created_at</text>
+<text x="658" y="1129" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3)</text>
+<polyline points="81,1164 679,1164" fill="none" stroke="#D6DFEB" stroke-width="1" stroke-linejoin="round"/>
+<text x="102" y="1169" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">session_id: SHA-256 token hash</text>
+<rect x="900" y="900" width="600" height="282" rx="10" fill="#FFFFFF" stroke="#D6DFEB" stroke-width="2"/>
+<rect x="901" y="901" width="598" height="57" rx="8" fill="#176D67" stroke="none" stroke-width="2"/>
+<rect x="901" y="935" width="598" height="23" rx="0" fill="#176D67" stroke="none" stroke-width="2"/>
+<text x="922" y="908" fill="#FFFFFF" font-family="Segoe UI,Arial,sans-serif" font-size="31" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">watchlists</text>
+<text x="922" y="968" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">KEY</text>
+<text x="1016" y="968" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">COLUMN</text>
+<text x="1478" y="968" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge">TYPE</text>
+<rect x="902" y="996" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="922" y="1002" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">PK FK</text>
+<text x="1016" y="1001" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">user_id</text>
+<text x="1478" y="1003" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<text x="922" y="1044" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">PK FK</text>
+<text x="1016" y="1043" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">movie_id</text>
+<text x="1478" y="1045" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">INT</text>
+<rect x="902" y="1080" width="596" height="42" rx="0" fill="#F4F7FB" stroke="none" stroke-width="2"/>
+<text x="922" y="1086" fill="#176D67" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge"></text>
+<text x="1016" y="1085" fill="#162337" font-family="Consolas,monospace" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">created_at</text>
+<text x="1478" y="1087" fill="#5F6D80" font-family="Consolas,monospace" font-size="22" font-weight="400" text-anchor="end" dominant-baseline="text-before-edge">DATETIME(3)</text>
+<polyline points="901,1122 1499,1122" fill="none" stroke="#D6DFEB" stroke-width="1" stroke-linejoin="round"/>
+<text x="922" y="1127" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">PRIMARY KEY (user_id, movie_id)</text>
+<text x="1720" y="900" fill="#162337" font-family="Segoe UI,Arial,sans-serif" font-size="29" font-weight="600" text-anchor="start" dominant-baseline="text-before-edge">How to read this</text>
+<text x="1720" y="952" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">PK  Primary key</text>
+<text x="1720" y="992" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">FK  Foreign key</text>
+<text x="1720" y="1032" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">UK  Unique key</text>
+<text x="1720" y="1072" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">?     Nullable column</text>
+<text x="1720" y="1112" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="24" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">1 : 0..N  One to zero or many</text>
+<text x="1720" y="1170" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="22" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">Movie deletion through the API is soft.</text>
+<text x="1720" y="1204" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="22" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">Foreign keys cascade on hard deletion.</text>
+<polyline points="80,1270 2320,1270" fill="none" stroke="#D6DFEB" stroke-width="2" stroke-linejoin="round"/>
+<text x="80" y="1293" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="22" font-weight="400" text-anchor="start" dominant-baseline="text-before-edge">Source: prisma/schema.prisma + SQL migrations  |  31 columns  |  Verified 20 Oct 2026</text>
+<text x="2320" y="1293" fill="#5F6D80" font-family="Segoe UI,Arial,sans-serif" font-size="22" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge">DOODI</text>
+</svg>
