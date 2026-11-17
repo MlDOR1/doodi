@@ -112,6 +112,7 @@ describe("reviews", () => {
 
     const adminEdit = await call(patchReview, "PATCH", path, rid, { cookie: admin.cookie, body: { content: "ลบข้อความไม่เหมาะสม" } });
     expect(adminEdit.status).toBe(200);
+    expect(adminEdit.json.data).toMatchObject({ rating: 5, has_spoiler: true });
     expect(adminEdit.json.data.author.user_id).toBe(owner.id);
     expect((await call(deleteReview, "DELETE", path, rid, { cookie: admin.cookie })).status).toBe(204);
     expect((await call(deleteReview, "DELETE", path, rid, { cookie: admin.cookie })).status).toBe(404);

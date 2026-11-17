@@ -14,6 +14,8 @@ import { ReviewForm } from "@/components/ReviewForm";
 import { ReviewItem } from "@/components/ReviewItem";
 import { WatchlistButton } from "@/components/WatchlistButton";
 import { btnPrimary, panel } from "@/components/ui";
+import { MovieExtras } from "@/components/MovieExtras";
+import { tmdbConfigured } from "@/server/tmdb";
 
 export const dynamic = "force-dynamic";
 
@@ -60,15 +62,15 @@ export default async function MovieDetailPage({
         <span className="text-cream">{movie.title}</span>
       </nav>
 
-      <section className="grid gap-8 md:grid-cols-[minmax(0,280px)_1fr] lg:gap-12">
-        <div className="mx-auto w-full max-w-[280px] md:mx-0">
+      <section className="grid grid-cols-[88px_minmax(0,1fr)] items-start gap-4 sm:grid-cols-[120px_minmax(0,1fr)] md:grid-cols-[220px_minmax(0,1fr)] md:gap-x-8 lg:gap-x-12">
+        <div className="w-full md:row-span-2">
           <div className="overflow-hidden rounded-2xl border border-line shadow-2xl shadow-black/60">
             <Poster src={movie.poster_url} title={movie.title} />
           </div>
         </div>
 
         <div className="min-w-0">
-          <h1 className="text-3xl font-bold leading-tight sm:text-5xl">{movie.title}</h1>
+          <h1 className="text-2xl font-bold leading-tight sm:text-4xl">{movie.title}</h1>
           <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-muted">
             <span>{movie.release_year ?? "ไม่ระบุปีที่ออกฉาย"}</span>
             {genres.map((g) => (
@@ -81,8 +83,10 @@ export default async function MovieDetailPage({
               </Link>
             ))}
           </p>
+        </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 rounded-2xl border border-line bg-surface p-5">
+        <div className="col-span-2 min-w-0 md:col-span-1 md:col-start-2">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-4 rounded-2xl border border-line bg-surface p-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted">คะแนนจากสมาชิก DOODI</p>
               {movie.average_rating === null ? (
@@ -99,21 +103,20 @@ export default async function MovieDetailPage({
               </p>
             </div>
             <div className="sm:ml-auto">
-              <WatchlistButton movieId={id} initialSaved={saved} signedIn={!!user} loginHref={loginHref} />
+              <WatchlistButton movieId={id} initialSaved={saved} signedIn={!!user} loginHref={loginHref} compact />
             </div>
           </div>
           <p className="mt-2 text-xs text-muted">
             คะแนนนี้มาจากรีวิวของสมาชิกบนเว็บไซต์ DOODI เท่านั้น ไม่ใช่คะแนนจาก TMDB หรือผู้ให้บริการภายนอก
           </p>
 
-          <h2 className="mt-8 text-xl font-bold">เรื่องย่อ</h2>
-          <p className="mt-2 max-w-prose whitespace-pre-line leading-relaxed text-cream/90">
+          <p className="mt-5 max-w-prose whitespace-pre-line leading-relaxed text-cream/90">
             {movie.synopsis || "ยังไม่มีเรื่องย่อสำหรับหนังเรื่องนี้"}
           </p>
         </div>
       </section>
 
-      <section id="reviews" aria-labelledby="reviews-h" className="mt-16 grid gap-10 lg:grid-cols-[1fr_minmax(0,380px)] lg:items-start">
+      <section id="reviews" aria-labelledby="reviews-h" className="mt-10 grid scroll-mt-28 gap-8 lg:grid-cols-[1fr_minmax(0,380px)] lg:items-start">
         <div className="min-w-0">
           <h2 id="reviews-h" className="text-2xl font-bold sm:text-3xl">
             รีวิวจากคนดู <span className="text-muted">({reviews.meta.total.toLocaleString("th-TH")})</span>
@@ -139,7 +142,7 @@ export default async function MovieDetailPage({
         </div>
 
         <aside className={`${panel} lg:sticky lg:top-24`} aria-labelledby="write-h">
-          <h2 id="write-h" className="text-xl font-bold">
+          <h2 id="write-h" className="scroll-mt-28 text-xl font-bold">
             {mine ? "คุณรีวิวเรื่องนี้แล้ว" : "เขียนรีวิว"}
           </h2>
           {!user ? (
@@ -160,6 +163,12 @@ export default async function MovieDetailPage({
           )}
         </aside>
       </section>
+
+      {movie.tmdb_id !== null && tmdbConfigured() && (
+        <div className="mt-12 border-t border-line pt-6">
+          <MovieExtras key={id} movieId={id} />
+        </div>
+      )}
     </div>
   );
 }

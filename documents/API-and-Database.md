@@ -1,8 +1,8 @@
 # DOODI Movie Review: API, Pages and Database
 
-Verified 2026-10-20 against the route handlers, validation schemas, service functions, Prisma schema and SQL migrations. This describes the implementation; the live database and deployed API were not queried.
+Updated 2026-11-17 against route handlers, validation schemas, service functions, Prisma schema and SQL migrations. Database metadata and the four new TMDB-backed APIs were also checked against the local application.
 
-**Presentation overview:** 21 explicitly implemented API operations across 15 URL paths: 19 under `/api/v1` and 2 maintenance operations under `/api/cron`. The database has 5 application tables and 5 foreign-key relationships.
+**Presentation overview:** 23 explicitly implemented API operations across 17 URL paths, all under `/api/v1`. The database has 5 application tables and 5 foreign-key relationships.
 
 **Diagram downloads:** [PNG for slides](database-diagram.png) · [SVG for scaling](database-diagram.svg) · [Editable Mermaid source](database-diagram.mmd). The diagram uses actual database table and column names.
 
@@ -16,7 +16,7 @@ Stack: Next.js (App Router), Prisma 7 + MySQL (MariaDB adapter), argon2 password
 |---|---|---|
 | `/` | Public | Home. Shows top-rated movies that have reviews (`featuredMovies`). |
 | `/movies` | Public | Movie list. Query: `q`, `genre`, `year`, `sort` (`newest` / `top_rated` / `most_reviewed`), `page`. |
-| `/movies/[id]` | Public | Detail page. Full-screen hero with TMDB backdrop and idle trailer, synopsis, reviews, review form. `id` must be a positive int. |
+| `/movies/[id]` | Public | Detail page with synopsis, cast/directors, trailers, Thailand providers, recommendations and reviews. `id` must be a positive int. |
 | `/login` | Public | Redirects to `?next=` if already signed in. |
 | `/register` | Public | Redirects to `?next=` if already signed in. |
 | `/watchlist` | Signed in | Redirects to `/login?next=/watchlist` if not signed in. |
@@ -33,7 +33,7 @@ All pages are `force-dynamic` (rendered per request). `not-found` and `error` bo
 
 Base path: `/api/v1`. Authentication is a session cookie, `doodi_session` (HttpOnly, SameSite=Lax, 30 days).
 
-Paths in the application endpoint tables below are relative to `/api/v1`; cron paths are shown in full. `{id}` means a movie ID in `/movies/{id}` and a review ID in `/reviews/{id}`. `{movieId}` is a movie ID. IDs are positive integers, at most 2147483647. "Signed in" includes both members and admins; "Owner or admin" means the review's author or an admin.
+Paths in the application endpoint tables below are relative to `/api/v1`. `{id}` means a movie ID in `/movies/{id}` and a review ID in `/reviews/{id}`. `{movieId}` is a movie ID. IDs are positive integers, at most 2147483647. "Signed in" includes both members and admins; "Owner or admin" means the review's author or an admin.
 
 The count includes the HTTP methods explicitly exported in the source. Framework-generated `HEAD`/`OPTIONS` handling is excluded. There are no explicitly implemented `PUT`, `HEAD` or `OPTIONS` handlers. Server-side helpers and generated page images are not additional application API endpoints.
 
@@ -94,14 +94,16 @@ Malformed JSON returns 400 `invalid_json`; invalid path IDs return 400 `invalid_
 | GET | `/admin/tmdb/search` | Admin | `query` (1-100), `page` | 200 paged TMDB results, each with `already_imported`. |
 | POST | `/admin/tmdb/import` | Admin | `tmdb_id` | 201 movie. Pulls Thai title, synopsis, genres, year, poster and alt titles. 409 if already imported, including previously deleted ones. |
 
-#### Cron (not for browsers)
+#### Public movie information from TMDB
 
-| Method | Path | Auth | Purpose |
-|---|---|---|---|
-| GET | `/api/cron/import-current` | `Authorization: Bearer $CRON_SECRET` | Imports up to 20 new movies from TMDB now-playing and popular (region TH). Scheduled daily at 09:17 Asia/Bangkok (02:17 UTC) in `vercel.json`. Returns 200 with `{ "data": { "candidates": 0, "imported": [], "failed": [] } }`; arrays contain TMDB IDs. |
-| GET | `/api/cron/backfill-titles` | `Authorization: Bearer $CRON_SECRET` | One-off. Attempts to fill `alt_titles` for up to 25 older movies per call. Manual only. Returns 200 with `{ "data": { "scanned": 0, "updated": 0 } }`. |
+| Method | Path | Result |
+|---|---|---|
+| GET | `/movies/{id}/credits` | 200 with up to 12 cast members and directors. |
+| GET | `/movies/{id}/videos` | 200 with up to 3 YouTube trailers/teasers. Thai data falls back to English. |
+| GET | `/movies/{id}/recommendations` | 200 with up to 8 non-adult recommendations. Imported movies link locally; other entries link to TMDB. Soft-deleted entries are excluded. |
+| GET | `/movies/{id}/watch-providers` | 200 with Thailand subscription, rent, buy, free and ad-supported providers, a TMDB watch link and JustWatch attribution. |
 
-Both return 503 `cron_not_configured` if `CRON_SECRET` is unset, or 401 `unauthorized` for an incorrect/missing bearer token. These GET requests can modify the database.
+These APIs use local movie IDs, require a visible movie with a TMDB ID, and return 404 for unavailable movies. Upstream data is cached for one hour. Missing TMDB configuration returns 503, upstream failures return 502, and no available content returns empty results. These GET requests do not create database rows. Run `npm run db:import:current` manually to import new movies.
 
 ### Cross-cutting rules
 
@@ -111,7 +113,7 @@ Both return 503 `cron_not_configured` if `CRON_SECRET` is unset, or 401 `unautho
   - register: 10 per hour per IP
 - **Login timing:** a dummy argon2 hash is verified when the email is unknown, so response time doesn't reveal which emails exist.
 - **Pagination:** `page` 1-100000, `page_size` max 50.
-- **Not an API route:** the trailer and backdrop on the movie page come from TMDB on the server (`heroMediaOf`). They are cached for 24 hours and add no endpoint.
+- **Movie extras:** the browser requests all four movie-information APIs in parallel and preserves available sections when another request fails.
 
 ---
 
@@ -210,4 +212,4 @@ Hard-deleting a user cascades to that user's reviews, watchlist entries and sess
 
 ### Environment variables
 
-`DATABASE_URL`, `DATABASE_CA` (provider CA for TLS), `DB_POOL_SIZE` (default 3 on Vercel, 10 elsewhere), `TMDB_API_READ_ACCESS_TOKEN`, `CRON_SECRET`, `APP_ORIGIN`.
+`DATABASE_URL`, `DATABASE_CA` (provider CA for TLS), `DB_POOL_SIZE` (default 3 on Vercel, 10 elsewhere), `TMDB_API_READ_ACCESS_TOKEN`, `APP_ORIGIN`.

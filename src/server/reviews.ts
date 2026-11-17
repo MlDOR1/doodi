@@ -86,9 +86,9 @@ export async function updateReview(
   const r = await prisma.review.update({
     where: { id: reviewId },
     data: {
-      ...(input.rating !== undefined && { rating: input.rating }),
-      ...(input.content !== undefined && { content: input.content }),
-      ...(input.has_spoiler !== undefined && { hasSpoiler: input.has_spoiler }),
+      rating: input.rating,
+      content: input.content,
+      hasSpoiler: input.has_spoiler,
     },
     include,
   });

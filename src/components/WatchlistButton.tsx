@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api, ClientApiError } from "@/lib/api-client";
 import { useToast } from "./Toast";
-import { btnGhost, btnPrimary, btnSmall } from "./ui";
+import { btnGhost, btnSmall } from "./ui";
 
 export function WatchlistButton({
   movieId,
@@ -65,7 +65,7 @@ export function WatchlistButton({
       onClick={toggle}
       disabled={busy}
       aria-pressed={signedIn ? saved : undefined}
-      className={`${saved ? btnGhost : btnPrimary} ${size}`}
+      className={`${btnGhost} ${size}`}
     >
       {busy ? "กำลังบันทึก…" : saved ? (compact ? "นำออก" : "✓ อยู่ในรายการอยากดู · นำออก") : "+ เพิ่มในรายการอยากดู"}
     </button>

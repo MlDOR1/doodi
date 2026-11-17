@@ -1,14 +1,15 @@
 import { prisma } from "./db";
 import { ApiError, isUniqueViolation } from "./http";
-import { createMovie } from "./movies";
+import { createMovie, getMovieOr404 } from "./movies";
 import { normalizeGenre } from "./schemas";
+import type { MovieCreditsDTO, MovieVideoDTO, RecommendedMovieDTO, WatchProvidersDTO } from "@/lib/types";
 
 const API = "https://api.themoviedb.org/3";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 export const tmdbConfigured = () => !!process.env.TMDB_API_READ_ACCESS_TOKEN?.trim();
 
-async function tmdbFetch<T>(path: string, params: Record<string, string | number>): Promise<T> {
+async function tmdbFetch<T>(path: string, params: Record<string, string | number>, revalidate = 0): Promise<T> {
   const token = process.env.TMDB_API_READ_ACCESS_TOKEN?.trim();
   if (!token) {
     throw new ApiError(
@@ -24,7 +25,7 @@ async function tmdbFetch<T>(path: string, params: Record<string, string | number
     res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
       signal: AbortSignal.timeout(8000),
-      cache: "no-store",
+      ...(revalidate ? { next: { revalidate } } : { cache: "no-store" }),
     });
   } catch {
     throw new ApiError(502, "tmdb_unreachable", "เชื่อมต่อ TMDB ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
@@ -59,6 +60,96 @@ const yearOf = (d?: string) => {
   return Number.isInteger(y) && y > 1800 ? y : null;
 };
 const posterOf = (p?: string | null) => (p ? `${IMG}${p}` : null);
+
+async function tmdbIdFor(movieId: number) {
+  const movie = await getMovieOr404(movieId);
+  if (movie.tmdb_id === null) throw new ApiError(404, "tmdb_movie_unavailable", "หนังเรื่องนี้ยังไม่ได้เชื่อมกับ TMDB");
+  return movie.tmdb_id;
+}
+
+export async function movieCredits(movieId: number): Promise<MovieCreditsDTO> {
+  const tmdbId = await tmdbIdFor(movieId);
+  const data = await tmdbFetch<{
+    cast: { id: number; name: string; character?: string; profile_path?: string | null }[];
+    crew: { id: number; name: string; job: string }[];
+  }>(`/movie/${tmdbId}/credits`, { language: "th-TH" }, 3600);
+  return {
+    cast: data.cast.slice(0, 12).map((person) => ({
+      person_id: person.id, name: person.name, character: person.character ?? "",
+      profile_url: person.profile_path ? `https://image.tmdb.org/t/p/w185${person.profile_path}` : null,
+    })),
+    directors: data.crew.filter((person) => person.job === "Director").map((person) => ({ person_id: person.id, name: person.name })),
+  };
+}
+
+interface TmdbVideo {
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official?: boolean;
+  iso_639_1?: string;
+}
+
+export async function movieVideos(movieId: number): Promise<MovieVideoDTO[]> {
+  const tmdbId = await tmdbIdFor(movieId);
+  const usable = (videos: TmdbVideo[]) => videos.filter((video) =>
+    video.site === "YouTube" && /^[\w-]{11}$/.test(video.key) && ["Trailer", "Teaser"].includes(video.type),
+  );
+  const th = await tmdbFetch<{ results: TmdbVideo[] }>(`/movie/${tmdbId}/videos`, { language: "th-TH" }, 3600);
+  let videos = usable(th.results);
+  if (!videos.length) {
+    const en = await tmdbFetch<{ results: TmdbVideo[] }>(`/movie/${tmdbId}/videos`, { language: "en-US" }, 3600);
+    videos = usable(en.results);
+  }
+  const priority = (video: TmdbVideo) =>
+    Number(/trailer|ตัวอย่าง/i.test(video.name)) * 4 + Number(video.type === "Trailer") * 2 + Number(video.official ?? false);
+  return videos.sort((a, b) => priority(b) - priority(a)).slice(0, 3).map((video) => ({
+    name: video.name, type: video.type, language: video.iso_639_1 ?? "", official: video.official ?? false,
+    url: `https://www.youtube.com/watch?v=${video.key}`,
+    embed_url: `https://www.youtube-nocookie.com/embed/${video.key}`,
+  }));
+}
+
+export async function movieRecommendations(movieId: number): Promise<RecommendedMovieDTO[]> {
+  const tmdbId = await tmdbIdFor(movieId);
+  const data = await tmdbFetch<{ results: (TmdbSearchItem & { adult?: boolean })[] }>(
+    `/movie/${tmdbId}/recommendations`, { language: "th-TH", page: 1 }, 3600,
+  );
+  const items = data.results.filter((movie) => !movie.adult && movie.id !== tmdbId).slice(0, 8);
+  const existing = await prisma.movie.findMany({
+    where: { tmdbId: { in: items.map((movie) => movie.id) } }, select: { id: true, tmdbId: true, deletedAt: true },
+  });
+  const known = new Map(existing.map((movie) => [movie.tmdbId, movie]));
+  return items.filter((movie) => !known.get(movie.id)?.deletedAt).map((movie) => ({
+    tmdb_id: movie.id, movie_id: known.get(movie.id)?.id ?? null, title: movie.title,
+    release_year: yearOf(movie.release_date), poster_url: posterOf(movie.poster_path),
+    url: `https://www.themoviedb.org/movie/${movie.id}`,
+  }));
+}
+
+export async function movieWatchProviders(movieId: number): Promise<WatchProvidersDTO> {
+  const tmdbId = await tmdbIdFor(movieId);
+  type Provider = { provider_id: number; provider_name: string; logo_path?: string | null };
+  const data = await tmdbFetch<{ results: Record<string, { link?: string } & Partial<Record<"flatrate" | "rent" | "buy" | "free" | "ads", Provider[]>>> }>(
+    `/movie/${tmdbId}/watch/providers`, {}, 3600,
+  );
+  const region = data.results.TH;
+  const labels = { flatrate: "สตรีมแบบสมาชิก", rent: "เช่า", buy: "ซื้อ", free: "ดูฟรี", ads: "ดูพร้อมโฆษณา" } as const;
+  return {
+    country: "TH", attribution: "JustWatch",
+    link: region?.link?.startsWith("https://www.themoviedb.org/") ? region.link : null,
+    groups: (Object.keys(labels) as (keyof typeof labels)[]).flatMap((type) => {
+      const providers = region?.[type] ?? [];
+      return providers.length ? [{
+        type, label: labels[type], providers: providers.map((provider) => ({
+          provider_id: provider.provider_id, name: provider.provider_name,
+          logo_url: provider.logo_path ? `https://image.tmdb.org/t/p/w92${provider.logo_path}` : null,
+        })),
+      }] : [];
+    }),
+  };
+}
 
 export async function searchTmdb(query: string, page: number) {
   const [data, genres] = await Promise.all([

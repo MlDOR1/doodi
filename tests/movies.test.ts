@@ -6,6 +6,7 @@ import { GET as listWatchlist, POST as addWatch } from "@/app/api/v1/watchlist/m
 import { GET as tmdbSearch } from "@/app/api/v1/admin/tmdb/search/route";
 import { POST as tmdbImport } from "@/app/api/v1/admin/tmdb/import/route";
 import { listAllReviews } from "@/server/reviews";
+import { featuredMovies } from "@/server/movies";
 import { prisma } from "@/server/db";
 import { call, makeMovie, makeUser, resetDb } from "./helpers";
 
@@ -48,7 +49,7 @@ describe("admin authorization", () => {
 
     const patched = await call(patchMovie, "PATCH", `/api/v1/movies/${id}`, { id }, { cookie: admin.cookie, body: { title: "ชื่อแก้ไข" } });
     expect(patched.status).toBe(200);
-    expect(patched.json.data.title).toBe("ชื่อแก้ไข");
+    expect(patched.json.data).toMatchObject({ title: "ชื่อแก้ไข", genre: "ดราม่า,ตลก", release_year: 2025 });
 
     const bad = await call(patchMovie, "PATCH", `/api/v1/movies/${id}`, { id }, { cookie: admin.cookie, body: { poster_url: "javascript:alert(1)" } });
     expect(bad.status).toBe(400);
@@ -122,6 +123,7 @@ describe("catalog", () => {
 
     expect(await titles({ sort: "top_rated" })).toEqual(["อะไรสักอย่าง", "บีมูฟวี่ 100%", "ซีไม่มีรีวิว"]);
     expect(await titles({ sort: "most_reviewed" })).toEqual(["บีมูฟวี่ 100%", "อะไรสักอย่าง", "ซีไม่มีรีวิว"]);
+    expect((await featuredMovies()).map((movie) => movie.movie_id)).toEqual([a.id, b.id]);
     expect(await titles({ genre: "ดราม่า" })).toHaveLength(2);
     expect(await titles({ genre: "ดรา" })).toHaveLength(0);
     expect(await titles({ year: 2021 })).toHaveLength(2);

@@ -43,7 +43,8 @@ Public registration always creates a `member`. The only way to get an admin is t
 | `npm run build` / `start` | Production build / server                                     |
 | `npm run lint`         | ESLint                                                           |
 | `npm run typecheck`    | `tsc --noEmit`                                                   |
-| `npm test`             | Vitest API/DB tests against `TEST_DATABASE_URL` (wipes that DB)  |
+| `npm test`             | Jest integration tests for five core APIs against `TEST_DATABASE_URL` (wipes that DB) |
+| `npm run test:regression` | Original Vitest regression suite against the same dedicated test DB |
 | `npm run test:e2e`     | Browser smoke test against a running server (needs Edge/Chrome)  |
 | `npm run db:migrate`   | `prisma migrate dev` (create/apply migrations while developing)  |
 | `npm run db:deploy`    | `prisma migrate deploy` (apply existing migrations)              |
@@ -51,6 +52,12 @@ Public registration always creates a `member`. The only way to get an admin is t
 | `npm run db:reset`     | **Destroys** the dev database and reapplies migrations            |
 
 `npm run test:e2e` signs up a new throwaway member and creates then soft-deletes a movie in whatever database the server uses, so run it against a dev database only.
+
+### Core API tests with Jest
+
+Run `npm test` to execute `tests/api.jest.ts`. It covers login, the public movie list, and creating, updating and deleting reviews. Assertions check HTTP responses, validation, duplicate reviews, ownership and the rows saved in MySQL.
+
+Jest uses Next.js's existing SWC transformer and Node's VM modules to run the Prisma ESM client. The configuration requires a dedicated `TEST_DATABASE_URL`, applies migrations there, and runs sequentially. The original 31-test suite remains available through `npm run test:regression`. Run the two commands separately because both reset the same test database.
 
 ## TMDB import (optional)
 
@@ -63,6 +70,28 @@ The site is fully usable without TMDB. Without a token the admin **นำเข�
 The token is read only on the server and never sent to the browser. Imports prefer Thai metadata (`th-TH`) and fall back to English for a missing title or synopsis. Posters use TMDB's `w500` images. The footer and admin page carry TMDB's required attribution; ratings shown on the site are always DOODI community ratings, never TMDB's.
 
 ## Data model
+
+### Current movies and professor demo
+
+Run `npm run db:import:current` to fetch up to 20 new movies from TMDB's current Thailand now-playing and popular lists, using the existing Thai/English metadata importer. The command loads `.env.local` and `.env` like Next.js and preserves existing movies, reviews, and soft deletions. Re-run it to refresh the catalog; it never substitutes static seed data when TMDB fails.
+
+Then run `npm run db:seed:demo-reviews` to add three clearly labeled sample reviewers to the 20 most recently imported visible movies. Reviews include different ratings and a spoiler example. Re-running does not overwrite existing reviews. These demo members use random unknown passwords and cannot be accessed with the old seed credentials.
+
+The examples are actual rows in `reviews`, linked to `users.user_id` and `movies.movie_id`; the existing API, moderation page, spoiler handling, review counts, and average ratings read them normally. Demo ratings contribute to the displayed averages. To inspect storage during your presentation:
+
+```sql
+SELECT r.reviews_id, u.display_name, m.title, r.rating, r.content,
+       r.has_spoiler, r.created_at, r.updated_at
+FROM reviews r
+JOIN users u ON u.user_id = r.user_id
+JOIN movies m ON m.movie_id = r.movie_id
+WHERE u.email LIKE '%@reviews.example.test'
+ORDER BY r.reviews_id;
+```
+
+The movie detail page loads cast/directors, YouTube trailers, recommendations, and Thailand watch providers through four public APIs under `/api/v1/movies/:id`: `/credits`, `/videos`, `/recommendations`, and `/watch-providers`. These use the server-side TMDB token and cache upstream responses for one hour. Empty data and failed requests have separate UI states. Watch availability is credited to JustWatch and links to the TMDB watch page.
+
+Run `npm run db:import:current` manually to add current movies. The app does not schedule imports.
 
 Tables and columns follow the project's database diagram (`users`, `movies`, `reviews`, `watchlists`), plus a `sessions` table for authentication.
 
@@ -83,6 +112,10 @@ Success bodies are `{ "data": ... }` (lists add `"meta": { page, page_size, tota
 | GET    | `/auth/me`                     | Member/Admin  | 200 (401 if signed out) |
 | GET    | `/movies`                      | Public        | 200 — `q`, `genre`, `year`, `sort=newest\|top_rated\|most_reviewed`, `page`, `page_size` (max 50) |
 | GET    | `/movies/:id`                  | Public        | 200 |
+| GET    | `/movies/:id/credits`          | Public        | 200 — cast (up to 12) and directors |
+| GET    | `/movies/:id/videos`           | Public        | 200 — up to 3 YouTube trailers/teasers, Thai then English |
+| GET    | `/movies/:id/recommendations`  | Public        | 200 — up to 8 recommendations with local links when imported |
+| GET    | `/movies/:id/watch-providers`  | Public        | 200 — Thailand watch providers with JustWatch attribution |
 | POST   | `/movies`                      | Admin         | 201 |
 | PATCH  | `/movies/:id`                  | Admin         | 200 |
 | DELETE | `/movies/:id`                  | Admin         | 204 (soft delete) |
@@ -114,7 +147,7 @@ prisma/            schema, migrations, seed + seed-data/movies.json
 src/app/           pages and /api/v1 route handlers
 src/server/        db, auth, services (movies, reviews, watchlist, tmdb), validation
 src/components/    UI components
-tests/             Vitest API tests + e2e-smoke.mjs browser script
+tests/             Jest core API tests, Vitest regression tests, browser smoke script
 ```
 
 ## Known limitations

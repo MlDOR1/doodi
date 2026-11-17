@@ -1,6 +1,6 @@
 import { ApiError } from "./http";
 
-// ponytail: in-process sliding window; one server instance only. Use Redis/edge limits when scaling out.
+// Each server instance keeps its own rate limit counters.
 const hits = new Map<string, number[]>();
 
 export function rateLimit(key: string, limit: number, windowMs: number) {

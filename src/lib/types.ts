@@ -32,6 +32,40 @@ export interface ReviewDTO {
   author: { user_id: number; display_name: string };
 }
 
+export interface MovieCreditsDTO {
+  cast: { person_id: number; name: string; character: string; profile_url: string | null }[];
+  directors: { person_id: number; name: string }[];
+}
+
+export interface MovieVideoDTO {
+  name: string;
+  type: string;
+  language: string;
+  official: boolean;
+  url: string;
+  embed_url: string;
+}
+
+export interface RecommendedMovieDTO {
+  tmdb_id: number;
+  movie_id: number | null;
+  title: string;
+  release_year: number | null;
+  poster_url: string | null;
+  url: string;
+}
+
+export interface WatchProvidersDTO {
+  country: "TH";
+  link: string | null;
+  attribution: "JustWatch";
+  groups: {
+    type: string;
+    label: string;
+    providers: { provider_id: number; name: string; logo_url: string | null }[];
+  }[];
+}
+
 export interface PageMeta {
   page: number;
   page_size: number;

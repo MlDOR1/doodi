@@ -104,14 +104,8 @@ export const createMovieSchema = z.object({
   poster_url: posterUrl.optional(),
 });
 
-export const updateMovieSchema = z
-  .object({
-    title: title.optional(),
-    synopsis: synopsis.optional(),
-    genre: genre.optional(),
-    release_year: releaseYear.optional(),
-    poster_url: posterUrl.optional(),
-  })
+export const updateMovieSchema = createMovieSchema
+  .partial()
   .refine((d) => Object.values(d).some((v) => v !== undefined), { message: "ไม่มีข้อมูลที่จะแก้ไข" });
 
 const rating = z

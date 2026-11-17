@@ -9,6 +9,7 @@ function create() {
   const ssl = ["true", "1", "required", "verify_ca", "verify_identity"].includes(
     (url.searchParams.get("ssl") ?? url.searchParams.get("sslmode") ?? url.searchParams.get("ssl-mode") ?? "").toLowerCase(),
   );
+  const isLocalDatabase = url.hostname === "localhost" || url.hostname === "127.0.0.1";
   const adapter = new PrismaMariaDb({
     host: url.hostname,
     port: Number(url.port || 3306),
@@ -18,6 +19,8 @@ function create() {
     // Each serverless instance holds its own pool, so keep it small on Vercel.
     connectionLimit: Number(process.env.DB_POOL_SIZE) || (process.env.VERCEL ? 3 : 10),
     timezone: "Z",
+    // The first login after MySQL starts needs the server's RSA public key.
+    allowPublicKeyRetrieval: isLocalDatabase && !ssl,
     // DATABASE_CA: PEM of the provider's private CA (Aiven signs with its own, which Node doesn't trust by default).
     ...(ssl ? { ssl: { rejectUnauthorized: true, ca: process.env.DATABASE_CA } } : {}),
   });
